@@ -4,5 +4,11 @@
 [2022-05-03] CERN burocracy, badge, office assignment. First meeting with Palla, Prosperi and Fedi. Various discussions. Tracking 101 with Palla, begin of reading of Bartz_2020.
 [2022-05-04] Fsm in VHDL with Prosperi. Install of Vivado 2020.1, IPBB. CMS-DPS meeting. Visit to TIF.
 [2022-05-05] Going on  with VHDL, generic ojects. Read Bartz_2020 and DN2014_043 about tracklet algorithm.
-[2022-05-06] Trying to install EMP framework, not able to compile ipbb software and make it work . Realizing that this VHDL 101 may be useless to my thesis.
+[2022-05-06] Trying to install EMP framework, not able to compile ipbb software and make it work .
 [2022-05-09] Meeting with Giacomo Fedi to understand how to work with Serenity. Access to Centos 7.9 machine. DPS meeting. Talking with Giacomo and Mark Pesaresti about latency measurements.
+[2022-05-10] Problems with ipbb software and emp framework. Cannot synthesize null algo.
+[2022-05-11] Even with the aid of Prosperi, no fimrware can be synthesized. Start of writing latency fsm in vhdl.
+[2022-05-12] Tomalin's code compiles, patch to Vivado 2020.1 needed. Latency fsm completed, still not able to synthesize.
+[2022-05-13] Bugs, bugs, bugs. Ended synthesis and implementation on Prosperi's machine, too late to go on laboratory to measure.
+[2022-05-17] DPS meeting.
+[2022-05-18] Palla meeting.
