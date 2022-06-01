@@ -1,4 +1,5 @@
-bibliography/
-emp-projects/
 pratiche/
-VHDL/
+resources/*
+firmware/*
+!firmware/emp-projects/
+

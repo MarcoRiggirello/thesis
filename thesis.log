@@ -12,3 +12,6 @@
 [2022-05-13] Bugs, bugs, bugs. Ended synthesis and implementation on Prosperi's machine, too late to go on laboratory to measure.
 [2022-05-17] DPS meeting.
 [2022-05-18] Palla meeting.
+[2022-05-26] Tomalin meeting. Deep explanation of l1track hls firmware.
+[2022-05-31] First succesful sythesis and first guided access to serenity with Prosperi. Guided tour of tools: serenitybutler, empbutler.
+[2022-06-01] First remote access and use of Serenity board without the help of Prosperi. Meeting with Fedi, Palla and Prosperi, discussion about the next step. TODO asap: syntesize various firmware with my latency module: tracklet, kalman, dtc. TODO later: get acquainted to cmssw and montecarlo data production. Reformatted thesis directory.
