@@ -91,6 +91,28 @@ end;
 
 begin
 
+  first_data_in <= d(0).valid = '1' and d(0).strobe = '1';
+  first_data_out <= out_dout(0).valid = '1' and out_dout(0).strobe = '1';
+
+  pin_latency : entity work.latency_on_pin_fsm
+    port map(clk=>clk_p,
+             rst=>c_reg(0)(0),
+             algo_data_in=>first_data_in,
+             algo_data_out=>first_data_out,
+             latency_pin=>gpio(0),
+             latency_count=>counter_reg(0)
+     );
+
+  ipb_counter_reg : entity work.ipbus_syncreg_v
+    generic map(N_CTRL=>1, N_STAT=>1)
+    port map(clk=>clk,
+             rst=>rst,
+             ipb_in=>ipb_in,
+             ipb_out=>ipb_out,
+             slv_clk=>clk_p,
+             d=>counter_reg,
+             q=>c_reg
+     );
 
 in_ttc <= ctrs;
 in_din <= d;
@@ -110,11 +132,12 @@ tracklet: tracklet_top port map ( clk_p, tracklet_reset, tracklet_din, tracklet_
 fout: tracklet_isolation_out port map ( clk_p, out_packet, out_din, out_dout );
 
 
-ipb_out <= IPB_RBUS_NULL;
+--ipb_out <= IPB_RBUS_NULL;
 bc0 <= '0';
-gpio <= (others => '0');
-gpio_en <= (others => '0');
+gpioi(29 downto 1) <= (others => '0');
+gpio_en(29 downto 1) <= (others => '0');
 
+gpio_en(0) <= '1';
 
 end;
 
