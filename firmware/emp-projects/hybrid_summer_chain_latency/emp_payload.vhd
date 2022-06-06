@@ -91,15 +91,18 @@ end;
 
 begin
 
-  first_data_in <= d(0).valid = '1' and d(0).strobe = '1';
-  first_data_out <= out_dout(0).valid = '1' and out_dout(0).strobe = '1';
+  p_inout : process (d(0), out_dout(0))
+    begin
+      first_data_in  <= d(0).valid and d(0).strobe;
+      first_data_out <= out_dout(0).valid and out_dout(0).strobe;
+  end process
 
   pin_latency : entity work.latency_on_pin_fsm
     port map(clk=>clk_p,
              rst=>c_reg(0)(0),
              algo_data_in=>first_data_in,
              algo_data_out=>first_data_out,
-             latency_pin=>gpio(0),
+             latency_pin=>open,
              latency_count=>counter_reg(0)
      );
 
@@ -134,10 +137,10 @@ fout: tracklet_isolation_out port map ( clk_p, out_packet, out_din, out_dout );
 
 --ipb_out <= IPB_RBUS_NULL;
 bc0 <= '0';
-gpioi(29 downto 1) <= (others => '0');
-gpio_en(29 downto 1) <= (others => '0');
+gpio(29 downto 0) <= (others => '0');
+gpio_en(29 downto 0) <= (others => '0');
 
-gpio_en(0) <= '1';
+--gpio_en(0) <= '1';
 
 end;
 
