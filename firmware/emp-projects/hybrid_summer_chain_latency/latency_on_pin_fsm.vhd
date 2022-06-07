@@ -51,23 +51,23 @@ begin
     end case;
   end process next_state_logic;
 
-  y_pin_logic : process(current_state)
+  latency_pin_logic : process(current_state)
   begin
     case current_state is
       when waiting_for_in =>
-        y_pin <= '0';
+        latency_pin <= '0';
         counter_enable <= '0';
       when waiting_for_out =>
-        y_pin <= '1';
+        latency_pin <= '1';
         counter_enable <= '1';
       when done =>
-        y_pin <= '0';
+        latency_pin <= '0';
         counter_enable <= '0';
       when others =>
-        y_pin <= '0';
+        latency_pin <= '0';
         counter_enable <= '0';
     end case;
-  end process y_pin_logic;
+  end process latency_pin_logic;
 
   state_register : process(clk, rst)
   begin

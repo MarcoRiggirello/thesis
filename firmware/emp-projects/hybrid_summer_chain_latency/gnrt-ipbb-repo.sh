@@ -21,6 +21,6 @@ cp $L1TK_EMP_FIRM_DIR'cfg/serenity.dep' $L1TK_EMP_FIRM_DIR'cfg/serenity.dep.bak'
 cp ./../latency_on_pin_fsm.vhd $L1TK_EMP_FIRM_DIR'hdl/'
 cp ./../emp_payload.vhd $L1TK_EMP_FIRM_DIR'hdl/'
 
-echo 'src -c latency_on_pin_fsm.vhd' >> $L1TK_EMP_FIRM_DIR'cfg/serenity.dep'
+echo 'src latency_on_pin_fsm.vhd' >> $L1TK_EMP_FIRM_DIR'cfg/serenity.dep'
 
 ipbb proj create vivado tracklet l1tk-for-emp:tracklet 'serenity.dep'

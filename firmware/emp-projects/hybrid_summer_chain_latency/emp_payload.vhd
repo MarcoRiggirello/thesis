@@ -95,7 +95,7 @@ begin
     begin
       first_data_in  <= d(0).valid and d(0).strobe;
       first_data_out <= out_dout(0).valid and out_dout(0).strobe;
-  end process
+  end process;
 
   pin_latency : entity work.latency_on_pin_fsm
     port map(clk=>clk_p,
