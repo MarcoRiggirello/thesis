@@ -36,10 +36,12 @@ end;
 
 architecture rtl of emp_payload is
 
+  -- Added by Marco Riggirello.
   signal first_data_in  : std_logic := '0';
   signal first_data_out : std_logic := '0';
   signal counter_reg    : ipb_reg_v(0 downto 0);
   signal c_reg          : ipb_reg_v(0 downto 0) := (others => (others => '0'));
+  -- End of addition.
 
 signal in_ttc: ttc_stuff_array( N_REGION - 1 downto 0 ) := ( others => TTC_STUFF_NULL );
 signal in_din: ldata( 4 * N_REGION - 1 downto 0 ) := ( others => ( ( others => '0' ), '0', '0', '1' ) );
@@ -91,6 +93,7 @@ end;
 
 begin
 
+  -- Added by Marco Riggirello.
   p_inout : process (d(0), out_dout(0))
     begin
       first_data_in  <= d(0).valid and d(0).strobe;
@@ -102,7 +105,7 @@ begin
              rst=>c_reg(0)(0),
              algo_data_in=>first_data_in,
              algo_data_out=>first_data_out,
-             latency_pin=>open,
+             latency_pin=>gpio(0),
              latency_count=>counter_reg(0)
      );
 
@@ -116,6 +119,7 @@ begin
              d=>counter_reg,
              q=>c_reg
      );
+  -- End of addition.
 
 in_ttc <= ctrs;
 in_din <= d;
@@ -137,8 +141,10 @@ fout: tracklet_isolation_out port map ( clk_p, out_packet, out_din, out_dout );
 
 --ipb_out <= IPB_RBUS_NULL;
 bc0 <= '0';
-gpio(29 downto 0) <= (others => '0');
-gpio_en(29 downto 0) <= (others => '0');
+gpio(29 downto 1) <= (others => '0');
+gpio_en(29 downto 1) <= (others => '0');
+
+gpio_en(0) <= c_reg(0)(1);
 
 --gpio_en(0) <= '1';
 
