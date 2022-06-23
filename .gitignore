@@ -1,5 +1,7 @@
-pratiche/
-resources/*
+analysis/*
+!analysis/SingleMu/
 firmware/*
 !firmware/emp-projects/
+pratiche/
+resources/*
 
