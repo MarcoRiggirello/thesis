@@ -1,7 +1,0 @@
-<!-- <node description="A null algo block" id="payload" fwinfo="endpoint;width=31"/> -->
-<node description="A null algo block whit latency measurement" fwinfo="endpoint;">
-	<node id="dummy_csregs" address="0x0" fwinfo="endpoint;width=1">
-		<node id="creg" address="0x0"/>
-		<node id="sreg" address="0x1"/>
-	</node>
-</node>
