@@ -1,0 +1,17 @@
+src emp_payload.vhd
+src latency_on_pin_fsm.vhd
+
+addrtab -c emp-fwk:components/payload emp_payload.xml
+
+src -c emp-fwk:components/payload ../ucf/emp_simple_payload.tcl
+
+src -c ipbus-firmware:components/ipbus_core ipbus_package.vhd
+src -c ipbus-firmware:components/ipbus_slaves ipbus_reg_types.vhd
+src -c ipbus-firmware:components/ipbus_slaves ipbus_syncreg_v.vhd
+src -c ipbus-firmware:components/ipbus_slaves syncreg_r.vhd
+src -c ipbus-firmware:components/ipbus_slaves syncreg_w.vhd
+
+include -c emp-fwk:boards/serenity/dc_ku15p dc_ku15p_so1_v1.dep 
+
+src emp_project_decl.vhd
+

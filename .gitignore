@@ -1,7 +1,7 @@
 analysis/*
 !analysis/SingleMu/
 firmware/*
-!firmware/emp-projects/
+!firmware/emp_projects/
 pratiche/
 resources/*
 
