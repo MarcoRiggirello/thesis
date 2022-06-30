@@ -7,6 +7,9 @@
 
 import argparse
 
+import numpy as np
+from matplotlib import pyplot as plt
+
 import ROOT
 
 ROOT.EnableImplicitMT()
@@ -58,23 +61,74 @@ def delta_R_match(root_df):
             .Define("mbmDR_trk_pt", "ROOT::VecOps::Take(trk_pt, mbmDR_index)")\
             .Define("mbmDR_trk_z0", "ROOT::VecOps::Take(trk_z0, mbmDR_index)")
     return out_df
-            
+
+def delta_R_quantiles(root_df, p, pt_min, pt_max):
+    """
+    This function computes quantiles of the DeltaR distribution
+    for a given interval of pt.
+    
+    Parameters
+    ----------
+    root_df: ROOT Data Frame
+    probs: np.array of place where compute quantiles
+    pt_min: float
+    pt_max: float
+
+    Returns
+    -------
+    The quantiles of the distribution.
+    """
+    q = np.zeros_like(p)
+    df1 = root_df.Define("DeltaR_filtered", f"DeltaR[{pt_min} <= tp_pt && tp_pt < {pt_max}]")
+    DeltaR_min = df1.Min("DeltaR_filtered").GetValue()
+    DeltaR_max = df1.Max("DeltaR_filtered").GetValue()
+    Delta_q = 0.144 * (DeltaR_max - DeltaR_min) / 128
+    _ = df1.Histo1D(("DeltaR", "DeltaR", 128, DeltaR_min, DeltaR_max), "DeltaR_filtered")\
+            .GetQuantiles(p.size, q, p)
+    return q, Delta_q
+
+#####################
+### THE EXECUTION ###
+#####################
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("filename", help="The filename of the root database.")
     args = parser.parse_args()
     
-    df = ROOT.RDataFrame("L1TrackNtuple/eventTree", args.filename)
-    df2 = delta_R_match(df)
+    df1 = ROOT.RDataFrame("L1TrackNtuple/eventTree", args.filename)
+    df2 = delta_R_match(df1)
+    df = df2.Define("DeltaR", "ROOT::VecOps::DeltaR(tp_eta, mbmDR_trk_eta, tp_phi, mbmDR_trk_phi)")
+
+    p = np.array([.9, .99])
+
+    q_90 = []
+    q_99 = []
     
-    d0 = df2.Define("d0_res", "tp_d0 - mbmDR_trk_d0").Histo1D("d0_res")
-    d0.Draw()
-    eta = df2.Define("eta_res", "tp_eta - mbmDR_trk_eta").Histo1D("eta_res")
-    eta.Draw()
-    phi = df2.Define("phi_res", "tp_phi - mbmDR_trk_phi").Histo1D("phi_res")
-    phi.Draw()
-    pt = df2.Define("pt_res", "tp_pt - mbmDR_trk_pt").Histo1D("pt_res")
-    pt.Draw()
-    z0 = df2.Define("z0_res", "tp_z0 - mbmDR_trk_z0").Histo1D("z0_res")
-    z0.Draw()
-    input("Press a key to close...")
+    delta_q = []
+
+    pt_bin = np.array([2.,8.,32.,64.,128.])
+    q_temp = 0
+    delta_q_temp = 0
+
+    for pt in zip(pt_bin[:-1],pt_bin[1:]):
+        q_temp, delta_q_temp = delta_R_quantiles(df, p, pt[0], pt[1])
+
+        q_90.append(q_temp[0])
+        q_99.append(q_temp[1])
+        
+        delta_q.append(delta_q_temp)
+
+    pt_bin_center = .5 * (pt_bin[:-1] + pt_bin[1:])
+    pt_bin_width = .5 * (pt_bin[1:] - pt_bin[:-1])
+
+    plt.title("DeltaR vs pt")
+    plt.errorbar(pt_bin_center, q_90, yerr=delta_q, xerr=pt_bin_width, linestyle=" ", label="90th percentile")
+    plt.errorbar(pt_bin_center, q_99, yerr=delta_q, xerr=pt_bin_width, linestyle=" ", label="99th percentile")
+    plt.xlabel("tp_pt [GeV]")
+    plt.ylabel("DeltaR")
+    plt.xscale("log")
+    plt.legend()
+
+    plt.show()
+
+    
