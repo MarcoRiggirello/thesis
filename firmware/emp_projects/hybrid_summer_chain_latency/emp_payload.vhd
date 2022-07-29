@@ -106,7 +106,7 @@ begin
              rst=>c_reg(0)(0),
              algo_data_in=>first_data_in,
              algo_data_out=>first_data_out,
-             latency_pin=>gpio(1),
+             latency_pin=>gpio(0),
              latency_count=>counter_reg(0)
      );
 
@@ -142,15 +142,12 @@ fout: tracklet_isolation_out port map ( clk_p, out_packet, out_din, out_dout );
 
 --ipb_out <= IPB_RBUS_NULL;
 bc0 <= '0';
-gpio(29 downto 2) <= (others => '0');
-gpio_en(29 downto 2) <= (others => '0');
+gpio(29 downto 1) <= (others => '0');
+gpio_en(29 downto 1) <= (others => '0');
 
-gpio_en(0) <= (others => '0');
-gpio(0) <= (others => '0');
+--gpio_en(0) <= c_reg(0)(1);
 
-gpio_en(1) <= c_reg(0)(1);
-
---gpio_en(0) <= '1';
+gpio_en(0) <= '0';
 
 end;
 

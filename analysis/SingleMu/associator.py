@@ -80,12 +80,12 @@ def delta_R_quantiles(root_df, p, pt_min, pt_max):
     """
     q = np.zeros_like(p)
     df1 = root_df.Define("DeltaR_filtered", f"DeltaR[{pt_min} <= tp_pt && tp_pt < {pt_max}]")
-    DeltaR_min = df1.Min("DeltaR_filtered").GetValue()
-    DeltaR_max = df1.Max("DeltaR_filtered").GetValue()
-    Delta_q = 0.144 * (DeltaR_max - DeltaR_min) / 128
-    _ = df1.Histo1D(("DeltaR", "DeltaR", 128, DeltaR_min, DeltaR_max), "DeltaR_filtered")\
-            .GetQuantiles(p.size, q, p)
-    return q, Delta_q
+    DeltaR_min = 0#df1.Min("DeltaR_filtered").GetValue()
+    DeltaR_max = 0.02#df1.Max("DeltaR_filtered").GetValue()
+    Delta_q = 0# 0.144 * (DeltaR_max - DeltaR_min) / 128
+    h = df1.Histo1D(("DeltaR", "DeltaR", 32, DeltaR_min, DeltaR_max), "DeltaR_filtered")
+    _ = h.GetQuantiles(p.size, q, p)
+    return q, h
 
 #####################
 ### THE EXECUTION ###
@@ -99,14 +99,14 @@ if __name__ == "__main__":
     df2 = delta_R_match(df1)
     df = df2.Define("DeltaR", "ROOT::VecOps::DeltaR(tp_eta, mbmDR_trk_eta, tp_phi, mbmDR_trk_phi)")
 
-    p = np.array([.9, .99])
+    p = np.array([.90, .99])
 
     q_90 = []
     q_99 = []
     
     delta_q = []
 
-    pt_bin = np.array([2.,8.,32.,64.,128.])
+    pt_bin = np.array([2.,5.,10.,15.,20.,30.,40.,60.,100.])
     q_temp = 0
     delta_q_temp = 0
 
@@ -118,15 +118,24 @@ if __name__ == "__main__":
         
         delta_q.append(delta_q_temp)
 
+    canvas_list = []
+    for h in delta_q:
+        c = ROOT.TCanvas("","",1200,900)
+        canvas_list.append(c)
+        h.Draw()
+        c.Draw()
+
+
+    input("a")
     pt_bin_center = .5 * (pt_bin[:-1] + pt_bin[1:])
     pt_bin_width = .5 * (pt_bin[1:] - pt_bin[:-1])
 
     plt.title("DeltaR vs pt")
     plt.errorbar(pt_bin_center, q_90, yerr=delta_q, xerr=pt_bin_width, linestyle=" ", label="90th percentile")
-    plt.errorbar(pt_bin_center, q_99, yerr=delta_q, xerr=pt_bin_width, linestyle=" ", label="99th percentile")
+    #plt.errorbar(pt_bin_center, q_99, yerr=delta_q, xerr=pt_bin_width, linestyle=" ", label="99th percentile")
     plt.xlabel("tp_pt [GeV]")
     plt.ylabel("DeltaR")
-    plt.xscale("log")
+    #plt.xscale("log")
     plt.legend()
 
     plt.show()
