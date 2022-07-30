@@ -142,10 +142,11 @@ fout: tracklet_isolation_out port map ( clk_p, out_packet, out_din, out_dout );
 
 --ipb_out <= IPB_RBUS_NULL;
 bc0 <= '0';
-gpio(29 downto 1) <= (others => '0');
-gpio_en(29 downto 1) <= (others => '0');
+gpio(29 downto 12) <= (others => '0');
+gpio_en(29 downto 12) <= (others => '0');
 
---gpio_en(0) <= c_reg(0)(1);
+gpio(11 downto 1) <= c_reg(0)(11 downto 1);
+gpio_en(11 downto 1) <= c_reg(0)(11 downto 1);
 
 gpio_en(0) <= '0';
 
