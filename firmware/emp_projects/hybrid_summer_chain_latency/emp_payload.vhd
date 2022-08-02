@@ -145,7 +145,7 @@ bc0 <= '0';
 gpio(29 downto 12) <= (others => '0');
 gpio_en(29 downto 12) <= (others => '0');
 
-gpio(11 downto 1) <= c_reg(0)(11 downto 1);
+gpio(11 downto 1) <= c_reg(0)(22 downto 12);
 gpio_en(11 downto 1) <= c_reg(0)(11 downto 1);
 
 gpio_en(0) <= '0';
